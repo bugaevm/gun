@@ -64,15 +64,15 @@ class ball():
             Возвращает True в случае столкновения мяча и цели. В противном случае возвращает False.
         """
         # FIXME
-        return 0 #  False
+        return 0  # False
 
 
 class gun():
     def __init__(self):
         self.f2_power = 10
         self.f2_on = False
-        self.an = 1
-        self.id = canv.create_line(20,450,50,420,width=7) # FIXME: don't know how to set it...
+        self.angle = 1
+        self.id = canv.create_line(20, 450, 50, 420, width=7)  # FIXME: don't know how to set it...
 
     def fire2_start(self, event):
         self.f2_on = True
@@ -86,9 +86,14 @@ class gun():
         global balls, bullet
         bullet += 1
         new_ball = ball()
-        self.an = math.atan((event.y - new_ball.y) / (event.x - new_ball.x))
+        if (event.x - new_ball.x) != 0:
+            self.angle = math.atan((event.y - new_ball.y) / (event.x - new_ball.x))
+        elif (event.y - new_ball.y) > 0:
+            self.angle = math.pi / 2
+        else:
+            self.angle = - math.pi / 2
         new_ball.vx = self.f2_power * math.cos(self.an)
-        new_ball.vy = - self.f2_power * math.sin(self.an)
+        new_ball.vy = self.f2_power * math.sin(self.an)
         balls += [new_ball]
         self.f2_on = 0
         self.f2_power = 10
@@ -102,8 +107,8 @@ class gun():
         else:
             canv.itemconfig(self.id, fill='black')
         canv.coords(self.id, 20, 450,
-                    20 + max(self.f2_power, 20) * math.cos(self.an),
-                    450 + max(self.f2_power, 20) * math.sin(self.an)
+                    20 + max(self.f2_power, 20) * math.cos(self.angle),
+                    450 + max(self.f2_power, 20) * math.sin(self.angle)
                     )
 
     def power_up(self):
