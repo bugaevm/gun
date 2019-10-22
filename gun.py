@@ -133,27 +133,27 @@ class gun():
             canv.itemconfig(self.id, fill='black')
 
 class target():
-    def __init__(self):
-        self.points = 0
-        self.live = 1
-        self.id = canv.create_oval(0, 0, 0, 0)
-    	self.id_points = canv.create_text(30,30,text = self.points,font = '28')
-    	self.new_target()
+	def __init__(self):
+		self.points = 0
+		self.live = 1
+		self.id = canv.create_oval(0, 0, 0, 0)
+		self.id_points = canv.create_text(30, 30, text=self.points, font='28')
+		self.new_target()
 
-    def new_target(self):
-        """ Инициализация новой цели. """
-        x = self.x = rnd(600, 780)
-        y = self.y = rnd(300, 550)
-        r = self.r = rnd(2, 50)
-        color = self.color = 'red'
-        canv.coords(self.id, x-r, y-r, x+r, y+r)
-        canv.itemconfig(self.id, fill=color)
+	def new_target(self):
+		""" Инициализация новой цели. """
+		x = self.x = rnd(600, 780)
+		y = self.y = rnd(300, 550)
+		r = self.r = rnd(2, 50)
+		color = self.color = 'red'
+		canv.coords(self.id, x-r, y-r, x+r, y+r)
+		canv.itemconfig(self.id, fill=color)
 
-    def hit(self, points=1):
-        """Попадание шарика в цель."""
-        canv.coords(self.id, -10, -10, -10, -10)
-        self.points += points
-        canv.itemconfig(self.id_points, text=self.points)
+	def hit(self, points=1):
+		"""Попадание шарика в цель."""
+		canv.coords(self.id, -10, -10, -10, -10)
+		self.points += points
+		canv.itemconfig(self.id_points, text=self.points)
 
 
 t1 = target()
