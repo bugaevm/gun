@@ -12,13 +12,13 @@ canv = tk.Canvas(root, bg='white')
 canv.pack(fill=tk.BOTH, expand=1)
 
 
-lass ball():
+class ball():
 	def __init__(self, x=40, y=450):
 		""" Конструктор класса ball
 
 		Args:
 		x - начальное положение мяча по горизонтали
-		
+
 		y - начальное положение мяча по вертикали
 		"""
 		self.x = x
@@ -33,7 +33,7 @@ lass ball():
 				self.x + self.r,
 				self.y + self.r,
 				fill=self.color)
-			
+
 		self.live = 30
 
 	def set_coords(self):
@@ -44,7 +44,7 @@ lass ball():
 				self.x + self.r,
 				self.y + self.r
         )
-   
+
 	def move(self):
 		"""Переместить мяч по прошествии единицы времени.
 
@@ -56,10 +56,10 @@ lass ball():
 		canv.move (self.id, self.vx, self.vy)
 		self.x += self.vx
 		self.y -= self.vy
-		
+
 		if ((canv.coords(self.id)[0] < 0) or (canv.coords(self.id)[2] > 800)):
 			self.vx = -self.vx*0.9
-			
+
 		if ((canv.coords(self.id)[1] < 0) or (canv.coords(self.id)[3] > 600)):
 			self.vy = -self.vy*0.9
 		self.vy += 1
@@ -74,7 +74,7 @@ lass ball():
 		"""
 		if (((canv.coords(obj.id)[0] + obj.r -(canv.coords(self.id)[0] + self.r))**2 + (canv.coords(obj.id)[1] + obj.r - canv.coords(self.id)[1] - self.r)**2) <= (self.r + obj.r)**2):
 			return True
-        
+
         # FIXME
 		else:
 			return False
