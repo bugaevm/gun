@@ -4,7 +4,6 @@ import math
 import time
 
 # print (dir(math))
-import self as self
 
 root = tk.Tk()
 fr = tk.Frame(root)
@@ -58,10 +57,8 @@ class ball():
 		
 		if ((canv.coords(self.id)[0] < 0) or (canv.coords(self.id)[2] > 800)):
 			self.vx = -self.vx*0.9
-			print (self.y)
 			if (canv.coords(self.id)[0] < 0):
 				canv.coords(self.id, 0, self.y - self.r, 2*self.r, self.y + self.r)
-				print (self.y)
 			if (canv.coords(self.id)[0] > 800):
 				canv.coords(self.id, 800 - 2*self.r, self.y - self.r, 800, self.y + self.r)
 			
