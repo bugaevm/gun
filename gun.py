@@ -70,12 +70,12 @@ class ball():
 class gun():
     def __init__(self):
         self.f2_power = 10
-        self.f2_on = 0
+        self.f2_on = False
         self.an = 1
         self.id = canv.create_line(20,450,50,420,width=7) # FIXME: don't know how to set it...
 
     def fire2_start(self, event):
-        self.f2_on = 1
+        self.f2_on = True
 
     def fire2_end(self, event):
         """Выстрел мячом.
@@ -107,7 +107,7 @@ class gun():
                     )
 
     def power_up(self):
-        if self.f2_on:
+        if self.f2_on is True:
             if self.f2_power < 100:
                 self.f2_power += 1
             canv.itemconfig(self.id, fill='orange')
@@ -118,9 +118,10 @@ class target():
     def __init__(self):
         self.points = 0
         self.live = 1
-        self.id = canv.create_oval(0,0,0,0)
-        self.id_points = canv.create_text(30,30,text = self.points,font = '28')
-        self.new_target()
+    # FIXME: don't work!!! How to call this functions when object is created?
+        self.id = canv.create_oval(0, 0, 0, 0)
+    # self.id_points = canv.create_text(30,30,text = self.points,font = '28')
+    # self.new_target()
 
     def new_target(self):
         """ Инициализация новой цели. """
@@ -177,3 +178,4 @@ def new_game(event=''):
 new_game()
 
 mainloop()
+
