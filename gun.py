@@ -4,7 +4,6 @@ import math
 import time
 
 # print (dir(math))
-import self as self
 
 root = tk.Tk()
 fr = tk.Frame(root)
@@ -18,7 +17,7 @@ class ball():
 		""" Конструктор класса ball
 		Args:
 		x - начальное положение мяча по горизонтали
-		
+
 		y - начальное положение мяча по вертикали
 		"""
 		self.x = x
@@ -33,7 +32,7 @@ class ball():
 				self.x + self.r,
 				self.y + self.r,
 				fill=self.color)
-			
+
 		self.live = 30
 
 	def set_coords(self):
@@ -44,7 +43,7 @@ class ball():
 				self.x + self.r,
 				self.y + self.r
         )
-   
+
 	def move(self):
 		"""Переместить мяч по прошествии единицы времени.
 		Метод описывает перемещение мяча за один кадр перерисовки. То есть, обновляет значения
@@ -55,16 +54,14 @@ class ball():
 		canv.move (self.id, self.vx, self.vy)
 		self.x = canv.coords(self.id)[0] + self.r
 		self.y = canv.coords(self.id)[1] + self.r
-		
+
 		if ((canv.coords(self.id)[0] < 0) or (canv.coords(self.id)[2] > 800)):
 			self.vx = -self.vx*0.9
-			print (self.y)
 			if (canv.coords(self.id)[0] < 0):
 				canv.coords(self.id, 0, self.y - self.r, 2*self.r, self.y + self.r)
-				print (self.y)
 			if (canv.coords(self.id)[0] > 800):
 				canv.coords(self.id, 800 - 2*self.r, self.y - self.r, 800, self.y + self.r)
-			
+
 		if ((canv.coords(self.id)[1] < 0) or (canv.coords(self.id)[3] > 600)):
 			self.vy = -self.vy*0.9
 			if (canv.coords(self.id)[1] < 0):
@@ -72,7 +69,7 @@ class ball():
 			if (canv.coords(self.id)[3] > 600):
 				canv.coords(self.id, self.x - self.r, 600 - 2*self.r, self.x + self.r, 600)
 		self.vy += 1
-		
+
 		#if (((self.vx)**2 + (self.vy)**2) <= 9):
 		#	canv.delete(self.id)
 
@@ -85,7 +82,7 @@ class ball():
 		"""
 		if (((canv.coords(obj.id)[0] + obj.r -(canv.coords(self.id)[0] + self.r))**2 + (canv.coords(obj.id)[1] + obj.r - canv.coords(self.id)[1] - self.r)**2) <= (self.r + obj.r)**2):
 			return True
-        
+
         # FIXME
 		else:
 			return False
