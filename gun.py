@@ -18,7 +18,7 @@ class ball():
 
 		Args:
 		x - начальное положение мяча по горизонтали
-		
+
 		y - начальное положение мяча по вертикали
 		"""
 		self.x = x
@@ -33,7 +33,7 @@ class ball():
 				self.x + self.r,
 				self.y + self.r,
 				fill=self.color)
-			
+
 		self.live = 30
 
 	def set_coords(self):
@@ -44,7 +44,7 @@ class ball():
 				self.x + self.r,
 				self.y + self.r
         )
-   
+
 	def move(self):
 		"""Переместить мяч по прошествии единицы времени.
 
@@ -56,10 +56,10 @@ class ball():
 		canv.move (self.id, self.vx, self.vy)
 		self.x += self.vx
 		self.y -= self.vy
-		
+
 		if ((self.x < 0) or (self.x > 800)):
 			self.vx = -self.vx
-			
+
 		if ((self.y < 0) or (self.y > 600)):
 			self.vy = -self.vy
 		self.vy += 1
@@ -74,7 +74,7 @@ class ball():
 		"""
 		if (((canv.coords(obj.id)[0] - obj.r + - self.x)**2 + (canv.coords(obj.id)[1] - obj.r - self.y)**2) <= (self.r + obj.r)**2):
 			return True
-        
+
         # FIXME
 		else:
 			return False
@@ -131,10 +131,9 @@ class target():
     def __init__(self):
         self.points = 0
         self.live = 1
-    # FIXME: don't work!!! How to call this functions when object is created?
         self.id = canv.create_oval(0, 0, 0, 0)
-    # self.id_points = canv.create_text(30,30,text = self.points,font = '28')
-    # self.new_target()
+    	self.id_points = canv.create_text(30,30,text = self.points,font = '28')
+    	self.new_target()
 
     def new_target(self):
         """ Инициализация новой цели. """
@@ -191,4 +190,3 @@ def new_game(event=''):
 new_game()
 
 mainloop()
-
