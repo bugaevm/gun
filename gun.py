@@ -145,21 +145,11 @@ class ball():
                 canv.coords(self.id, self.x - self.r, 600 - 2 * self.r, self.x + self.r, 600)
         self.vy += 1
 
-    # if (((self.vx)**2 + (self.vy)**2) <= 9):
-    #	canv.delete(self.id)
 
     def hittest(self, obj):
-        """Функция проверяет сталкивалкивается ли данный обьект с целью, описываемой в обьекте obj.
-		Args:
-			obj: Обьект, с которым проверяется столкновение.
-		Returns:
-			Возвращает True в случае столкновения мяча и цели. В противном случае возвращает False.
-		"""
         if (((canv.coords(obj.id)[0] + obj.r - (canv.coords(self.id)[0] + self.r)) ** 2 + (
                 canv.coords(obj.id)[1] + obj.r - canv.coords(self.id)[1] - self.r) ** 2) <= (self.r + obj.r) ** 2):
             return True
-
-        # FIXME
         else:
             return False
 
@@ -169,7 +159,7 @@ class gun():
         self.f2_power = 10
         self.f2_on = False
         self.angle = 1
-        self.id = canv.create_line(20, 450, 50, 420, width=7)  # FIXME: don't know how to set it...
+        self.id = canv.create_line(20, 450, 50, 420, width=7)
 
     def fire2_start(self, event):
         self.f2_on = True
@@ -191,7 +181,13 @@ class gun():
             self.angle = - math.pi / 2
         new_ball.vx = self.f2_power * math.cos(self.angle)
         new_ball.vy = self.f2_power * math.sin(self.angle)
-        balls += [new_ball]
+        if len(balls) > 10:
+            canv.delete(balls[0].id)
+            for i in range(len(balls) - 1):
+                balls[i] = balls[i + 1]
+            balls[len(balls) - 1] = new_ball
+        else:
+            balls += [new_ball]
         self.f2_on = 0
         self.f2_power = 10
 
@@ -285,4 +281,4 @@ def new_game(event=''):
 
 new_game()
 
-mainloop()
+root.mainloop()
