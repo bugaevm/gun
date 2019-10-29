@@ -81,11 +81,13 @@ class ball():
 
 
 class gun():
-    def __init__(self):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
         self.f2_power = 10
         self.f2_on = False
         self.angle = 1
-        self.id = canv.create_line(20, 450, 50, 420, width=7)
+        self.id = canv.create_line(self.x, self.y, self.x + 30, self.y - 30, width=7)
 
     def fire2_start(self, event):
         self.f2_on = True
@@ -97,7 +99,7 @@ class gun():
         """
         global balls, bullet
         bullet += 1
-        new_ball = ball()
+        new_ball = ball(self.x, self.y)
         if (event.x - new_ball.x) != 0:
             self.angle = math.atan((event.y - new_ball.y) / (event.x - new_ball.x))
         elif (event.y - new_ball.y) > 0:
@@ -119,9 +121,9 @@ class gun():
     def targetting(self, event=0):
         """Прицеливание. Зависит от положения мыши."""
         if event:
-            if (event.x - 20) != 0:
-                self.angle = math.atan((event.y - 450) / (event.x - 20))
-            elif (event.y - 450) > 0:
+            if (event.x - self.x) != 0:
+                self.angle = math.atan((event.y - self.y) / (event.x - self.x))
+            elif (event.y - self.y) > 0:
                 self.angle = math.pi / 2
             else:
                 self.angle = - math.pi / 2
@@ -130,9 +132,9 @@ class gun():
             canv.itemconfig(self.id, fill='orange')
         else:
             canv.itemconfig(self.id, fill='black')
-        canv.coords(self.id, 20, 450,
-                    20 + max(self.f2_power, 20) * math.cos(self.angle),
-                    450 + max(self.f2_power, 20) * math.sin(self.angle)
+        canv.coords(self.id, self.x, self.y,
+                    self.x + max(self.f2_power, 20) * math.cos(self.angle),
+                    self.y + max(self.f2_power, 20) * math.sin(self.angle)
                     )
 
     def power_up(self):
@@ -183,31 +185,30 @@ class target():
 
 targets = list()
 #t1 = target()
-for c in ('red', 'yellow', 'cyan'):
-    targets.append(target(c))
+for i in range(3):
+    targets.append(target())
 
 screen1 = canv.create_text(400, 300, text='', font='28')
-g1 = gun()
+guns = list()
+for i in range(3):
+    guns.append(gun(10, 420 - 50*i))
 bullet = 0
 balls = []
 
 
 def new_game(event=''):
-    global gun, t1, screen1, balls, bullet
+    global guns, targets, screen1, balls, bullet
     for t in targets:
         t.new_target()
     bullet = 0
     balls = []
-    canv.bind('<Button-1>', g1.fire2_start)
-    canv.bind('<ButtonRelease-1>', g1.fire2_end)
-    canv.bind('<Motion>', g1.targetting)
+    canv.bind('<Button-1>', fire_start)
+    canv.bind('<ButtonRelease-1>', fire_end)
+    canv.bind('<Motion>', targeting)
 
     z = 0.03
 
     while any([t.live for t in targets]) or balls:
-        for t in targets:
-            t.move()
-
         del_balls()
         for b in balls:
             b.move()
@@ -217,12 +218,13 @@ def new_game(event=''):
                     t.hit()
                     #canv.bind('<Button-1>', '')
                     #canv.bind('<ButtonRelease-1>', '')
-                    canv.itemconfig(screen1, text=f'Вы уничтожили цель за {bullet} выстрел{ending(bullet)}')
+                    canv.itemconfig(screen1, text='Вы уничтожили цель за {} выстрел{}'.format(bullet, ending(bullet)))
 
         canv.update()
         time.sleep(z)
-        g1.targetting()
-        g1.power_up()
+        for g in guns:
+            g.targetting()
+            g.power_up()
 
     canv.itemconfig(screen1, text='')
     canv.delete(gun)
@@ -254,7 +256,23 @@ def ending(num):
         return 'а'
 
     return 'ов'
-
+    
+def fire_start(event):
+    global guns
+    for g in guns:
+        g.fire2_start(event)
+       
+        
+def fire_end(event):
+    global guns
+    for g in guns:
+        g.fire2_end(event)
+		
+def targeting(event):
+    global guns
+    for g in guns:
+        g.targetting(event)
+        
 new_game()
 
 root.mainloop()
