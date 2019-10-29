@@ -145,10 +145,11 @@ class gun():
 
 
 class target():
-    def __init__(self):
+    def __init__(self, color='red'):
         self.points = 0
         self.id = canv.create_oval(0, 0, 0, 0)
         self.id_points = canv.create_text(30, 30, text=self.points, font='28')
+        self.color = color
         self.new_target()
 
     def new_target(self):
@@ -157,7 +158,7 @@ class target():
         y = self.y = rnd(300, 550)
         r = self.r = rnd(2, 50)
         self.dir = 3
-        color = self.color = 'red'
+        color = self.color
         canv.coords(self.id, x - r, y - r, x + r, y + r)
         canv.itemconfig(self.id, fill=color)
         self.live = True
@@ -182,8 +183,8 @@ class target():
 
 targets = list()
 #t1 = target()
-for i in range(3):
-    targets.append(target())
+for c in ('red', 'yellow', 'cyan'):
+    targets.append(target(c))
 
 screen1 = canv.create_text(400, 300, text='', font='28')
 g1 = gun()
