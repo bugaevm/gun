@@ -148,7 +148,6 @@ class target():
     def __init__(self, color='red'):
         self.points = 0
         self.id = canv.create_oval(0, 0, 0, 0)
-        self.id_points = canv.create_text(30, 30, text=self.points, font='28')
         self.color = color
         self.new_target()
 
@@ -163,11 +162,14 @@ class target():
         canv.itemconfig(self.id, fill=color)
         self.live = True
 
-    def hit(self, points=1):
+    def hit(self):
         """Попадание шарика в цель."""
+        global points
+
         canv.coords(self.id, -10, -10, -10, -10)
-        self.points += points
-        canv.itemconfig(self.id_points, text=self.points)
+        points += 1
+        #self.points += points
+        show_points()
 
     def move(self):
         self.dir += rnd(-100, 100) / (100 * math.pi)
@@ -193,7 +195,7 @@ balls = []
 
 
 def new_game(event=''):
-    global gun, t1, screen1, balls, bullet
+    global gun, points, screen1, balls, bullet
     for t in targets:
         t.new_target()
     bullet = 0
@@ -242,6 +244,11 @@ def del_balls():
     for i in range(counter):
         balls[balls.index(None)] = balls[len(balls) - 1]
         balls.pop()
+
+points = 0
+t_points = canv.create_text(30, 30, text='', font='28')
+def show_points():
+    canv.itemconfig(t_points, text=str(points))
 
 def ending(num):
     if 11 <= num <= 14:
