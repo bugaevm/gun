@@ -201,7 +201,8 @@ def new_game(event=''):
                     t.hit()
                     #canv.bind('<Button-1>', '')
                     #canv.bind('<ButtonRelease-1>', '')
-                    canv.itemconfig(screen1, text=f'Вы уничтожили цель за {bullet} выстрелов')
+                    canv.itemconfig(screen1, text=f'Вы уничтожили цель за {bullet} выстрел{ending(bullet)}')
+
         canv.update()
         time.sleep(z)
         g1.targetting()
@@ -226,6 +227,17 @@ def del_balls():
         balls[balls.index(None)] = balls[len(balls) - 1]
         balls.pop()
 
+def ending(num):
+    if 11 <= num <= 14:
+        return 'ов'
+
+    if num % 10 == 1:
+        return ''
+
+    if 2 <= num % 10 <= 4:
+        return 'а'
+
+    return 'ов'
 
 new_game()
 
