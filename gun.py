@@ -251,6 +251,7 @@ balls = []
 
 def new_game(event=''):
     global gun, t1, screen1, balls, bullet
+    canv.itemconfig(screen1, text='')
     t1.new_target()
     bullet = 0
     balls = []
@@ -285,11 +286,11 @@ def del_balls():
     global balls
     counter = 0
     for i in range(len(balls)):
-        if balls[i].vx * balls[i].vx + balls[i].vy * balls[i].vy < 5:
+        if (round(balls[i].vy) == 0) and (canv.coords(balls[i].id)[1] > 560):
             canv.delete(balls[i].id)
             balls[i] = None
             counter += 1
-    print()
+
     for i in range(counter):
         balls[balls.index(None)] = balls[len(balls) - 1]
         balls.pop()
