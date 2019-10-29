@@ -108,8 +108,6 @@ class ball():
             self.y + self.r,
             fill=self.color)
 
-        self.live = 30
-
     def set_coords(self):
         canv.coords(
             self.id,
@@ -131,37 +129,28 @@ class ball():
         self.y = canv.coords(self.id)[1] + self.r
 
         if ((canv.coords(self.id)[0] < 0) or (canv.coords(self.id)[2] > 800)):
-            self.vx = -self.vx * 0.9
+            self.vx = -self.vx * 0.8
             if (canv.coords(self.id)[0] < 0):
                 canv.coords(self.id, 0, self.y - self.r, 2 * self.r, self.y + self.r)
             if (canv.coords(self.id)[0] > 800):
                 canv.coords(self.id, 800 - 2 * self.r, self.y - self.r, 800, self.y + self.r)
 
         if ((canv.coords(self.id)[1] < 0) or (canv.coords(self.id)[3] > 600)):
-            self.vy = -self.vy * 0.9
+            self.vy = -self.vy * 0.8
             if (canv.coords(self.id)[1] < 0):
                 canv.coords(self.id, self.x - self.r, 0, self.x + self.r, 2 * self.r)
             if (canv.coords(self.id)[3] > 600):
                 canv.coords(self.id, self.x - self.r, 600 - 2 * self.r, self.x + self.r, 600)
         self.vy += 1
 
-    # if (((self.vx)**2 + (self.vy)**2) <= 9):
-    #	canv.delete(self.id)
 
     def hittest(self, obj):
-        """Функция проверяет сталкивалкивается ли данный обьект с целью, описываемой в обьекте obj.
-		Args:
-			obj: Обьект, с которым проверяется столкновение.
-		Returns:
-			Возвращает True в случае столкновения мяча и цели. В противном случае возвращает False.
-		"""
         if (((canv.coords(obj.id)[0] + obj.r - (canv.coords(self.id)[0] + self.r)) ** 2 + (
                 canv.coords(obj.id)[1] + obj.r - canv.coords(self.id)[1] - self.r) ** 2) <= (self.r + obj.r) ** 2):
             return True
-
-        # FIXME
         else:
             return False
+
 
 
 class gun():
@@ -169,7 +158,7 @@ class gun():
         self.f2_power = 10
         self.f2_on = False
         self.angle = 1
-        self.id = canv.create_line(20, 450, 50, 420, width=7)  # FIXME: don't know how to set it...
+        self.id = canv.create_line(20, 450, 50, 420, width=7)
 
     def fire2_start(self, event):
         self.f2_on = True
@@ -191,7 +180,13 @@ class gun():
             self.angle = - math.pi / 2
         new_ball.vx = self.f2_power * math.cos(self.angle)
         new_ball.vy = self.f2_power * math.sin(self.angle)
-        balls += [new_ball]
+        if len(balls) > 10:
+            canv.delete(balls[0].id)
+            for i in range(len(balls) - 1):
+                balls[i] = balls[i + 1]
+            balls[len(balls) - 1] = new_ball
+        else:
+            balls += [new_ball]
         self.f2_on = 0
         self.f2_power = 10
 
@@ -266,6 +261,7 @@ def new_game(event=''):
     z = 0.03
     t1.live = 1
     while t1.live or balls:
+        del_balls()
         for b in balls:
             b.move()
             if b.hittest(t1) and t1.live:
@@ -278,11 +274,27 @@ def new_game(event=''):
         time.sleep(0.03)
         g1.targetting()
         g1.power_up()
+
     canv.itemconfig(screen1, text='')
     canv.delete(gun)
+
     root.after(750, new_game)
+
+
+def del_balls():
+    global balls
+    counter = 0
+    for i in range(len(balls)):
+        if balls[i].vx * balls[i].vx + balls[i].vy * balls[i].vy < 5:
+            canv.delete(balls[i].id)
+            balls[i] = None
+            counter += 1
+    print()
+    for i in range(counter):
+        balls[balls.index(None)] = balls[len(balls) - 1]
+        balls.pop()
 
 
 new_game()
 
-mainloop()
+root.mainloop()
