@@ -156,6 +156,7 @@ class target():
         x = self.x = rnd(600, 780)
         y = self.y = rnd(300, 550)
         r = self.r = rnd(2, 50)
+        self.dir = 3
         color = self.color = 'red'
         canv.coords(self.id, x - r, y - r, x + r, y + r)
         canv.itemconfig(self.id, fill=color)
@@ -166,6 +167,17 @@ class target():
         canv.coords(self.id, -10, -10, -10, -10)
         self.points += points
         canv.itemconfig(self.id_points, text=self.points)
+
+    def move(self):
+        self.dir += rnd(-100, 100) / (100 * math.pi)
+        v = bullet + 0.5
+
+        r = self.r
+        x = self.x = max(r, min(800 - r, self.x + v * math.cos(self.dir)))
+        y = self.y = max(r, min(600 - r, self.y + v * math.sin(self.dir)))
+
+        if self.live:
+            canv.coords(self.id, x - r, y - r, x + r, y + r)
 
 
 targets = list()
@@ -192,6 +204,9 @@ def new_game(event=''):
     z = 0.03
 
     while any([t.live for t in targets]) or balls:
+        for t in targets:
+            t.move()
+
         del_balls()
         for b in balls:
             b.move()
