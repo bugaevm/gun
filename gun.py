@@ -129,11 +129,11 @@ class ball():
         self.y = canv.coords(self.id)[1] + self.r
 
         if ((canv.coords(self.id)[0] < 0) or (canv.coords(self.id)[2] > 800)):
-            self.vx = -self.vx * 0.8
+            self.vx = -self.vx * 0.6
             if (canv.coords(self.id)[0] < 0):
                 canv.coords(self.id, 0, self.y - self.r, 2 * self.r, self.y + self.r)
             if (canv.coords(self.id)[0] > 800):
-                canv.coords(self.id, 800 - 2 * self.r, self.y - self.r, 800, self.y + self.r)
+                canv.coords(self.id, 780 - 2 * self.r, self.y - self.r, 780, self.y + self.r)
 
         if ((canv.coords(self.id)[1] < 0) or (canv.coords(self.id)[3] > 600)):
             self.vy = -self.vy * 0.8
@@ -275,7 +275,7 @@ def new_game(event=''):
         g1.targetting()
         g1.power_up()
 
-    canv.itemconfig(screen1, text='')
+    canv.itemconfig(screen1, text='                      ')
     canv.delete(gun)
 
     root.after(750, new_game)
@@ -285,7 +285,7 @@ def del_balls():
     global balls
     counter = 0
     for i in range(len(balls)):
-        if balls[i].vx * balls[i].vx + balls[i].vy * balls[i].vy < 5:
+        if (-1 < balls[i].vy < 1 and balls[i].y > 550):
             canv.delete(balls[i].id)
             balls[i] = None
             counter += 1
