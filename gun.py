@@ -108,8 +108,6 @@ class ball():
             self.y + self.r,
             fill=self.color)
 
-        self.live = 30
-
     def set_coords(self):
         canv.coords(
             self.id,
@@ -131,14 +129,14 @@ class ball():
         self.y = canv.coords(self.id)[1] + self.r
 
         if ((canv.coords(self.id)[0] < 0) or (canv.coords(self.id)[2] > 800)):
-            self.vx = -self.vx * 0.9
+            self.vx = -self.vx * 0.8
             if (canv.coords(self.id)[0] < 0):
                 canv.coords(self.id, 0, self.y - self.r, 2 * self.r, self.y + self.r)
             if (canv.coords(self.id)[0] > 800):
                 canv.coords(self.id, 800 - 2 * self.r, self.y - self.r, 800, self.y + self.r)
 
         if ((canv.coords(self.id)[1] < 0) or (canv.coords(self.id)[3] > 600)):
-            self.vy = -self.vy * 0.9
+            self.vy = -self.vy * 0.8
             if (canv.coords(self.id)[1] < 0):
                 canv.coords(self.id, self.x - self.r, 0, self.x + self.r, 2 * self.r)
             if (canv.coords(self.id)[3] > 600):
@@ -152,6 +150,7 @@ class ball():
             return True
         else:
             return False
+
 
 
 class gun():
@@ -262,6 +261,7 @@ def new_game(event=''):
     z = 0.03
     t1.live = 1
     while t1.live or balls:
+        del_balls()
         for b in balls:
             b.move()
             if b.hittest(t1) and t1.live:
@@ -274,9 +274,25 @@ def new_game(event=''):
         time.sleep(0.03)
         g1.targetting()
         g1.power_up()
+
     canv.itemconfig(screen1, text='')
     canv.delete(gun)
+
     root.after(750, new_game)
+
+
+def del_balls():
+    global balls
+    counter = 0
+    for i in range(len(balls)):
+        if balls[i].vx * balls[i].vx + balls[i].vy * balls[i].vy < 5:
+            canv.delete(balls[i].id)
+            balls[i] = None
+            counter += 1
+    print()
+    for i in range(counter):
+        balls[balls.index(None)] = balls[len(balls) - 1]
+        balls.pop()
 
 
 new_game()
