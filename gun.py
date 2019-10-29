@@ -17,7 +17,6 @@ class ball():
         """ Конструктор класса ball
 		Args:
 		x - начальное положение мяча по горизонтали
-
 		y - начальное положение мяча по вертикали
 		"""
         self.x = x
@@ -165,7 +164,6 @@ class gun():
 
     def fire2_end(self, event):
         """Выстрел мячом.
-
         Происходит при отпускании кнопки мыши.
         Начальные значения компонент скорости мяча vx и vy зависят от положения мыши.
         """
@@ -285,7 +283,7 @@ def del_balls():
     global balls
     counter = 0
     for i in range(len(balls)):
-        if (round(balls[i].vy) == 0) and (canv.coords(balls[i].id)[1] > 560):
+        if (-1 < balls[i].vy < 1) and (balls[i].y > 550):
             canv.delete(balls[i].id)
             balls[i] = None
             counter += 1
