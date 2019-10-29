@@ -147,7 +147,6 @@ class gun():
 class target():
     def __init__(self):
         self.points = 0
-        self.live = 1
         self.id = canv.create_oval(0, 0, 0, 0)
         self.id_points = canv.create_text(30, 30, text=self.points, font='28')
         self.new_target()
@@ -160,6 +159,7 @@ class target():
         color = self.color = 'red'
         canv.coords(self.id, x - r, y - r, x + r, y + r)
         canv.itemconfig(self.id, fill=color)
+        self.live = True
 
     def hit(self, points=1):
         """Попадание шарика в цель."""
@@ -168,7 +168,11 @@ class target():
         canv.itemconfig(self.id_points, text=self.points)
 
 
-t1 = target()
+targets = list()
+#t1 = target()
+for i in range(3):
+    targets.append(target())
+
 screen1 = canv.create_text(400, 300, text='', font='28')
 g1 = gun()
 bullet = 0
@@ -177,7 +181,8 @@ balls = []
 
 def new_game(event=''):
     global gun, t1, screen1, balls, bullet
-    t1.new_target()
+    for t in targets:
+        t.new_target()
     bullet = 0
     balls = []
     canv.bind('<Button-1>', g1.fire2_start)
@@ -185,19 +190,20 @@ def new_game(event=''):
     canv.bind('<Motion>', g1.targetting)
 
     z = 0.03
-    t1.live = 1
-    while t1.live or balls:
+
+    while any([t.live for t in targets]) or balls:
         del_balls()
         for b in balls:
             b.move()
-            if b.hittest(t1) and t1.live:
-                t1.live = 0
-                t1.hit()
-                canv.bind('<Button-1>', '')
-                canv.bind('<ButtonRelease-1>', '')
-                canv.itemconfig(screen1, text='Вы уничтожили цель за ' + str(bullet) + ' выстрелов')
+            for t in targets:
+                if b.hittest(t) and t.live:
+                    t.live = False
+                    t.hit()
+                    #canv.bind('<Button-1>', '')
+                    #canv.bind('<ButtonRelease-1>', '')
+                    canv.itemconfig(screen1, text=f'Вы уничтожили цель за {bullet} выстрелов')
         canv.update()
-        time.sleep(0.03)
+        time.sleep(z)
         g1.targetting()
         g1.power_up()
 
