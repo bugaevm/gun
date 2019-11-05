@@ -108,7 +108,7 @@ class gun():
             self.angle = - math.pi / 2
         new_ball.vx = self.f2_power * math.cos(self.angle)
         new_ball.vy = self.f2_power * math.sin(self.angle)
-        if len(balls) > 10:
+        if len(balls) > 900:
             canv.delete(balls[0].id)
             for i in range(len(balls) - 1):
                 balls[i] = balls[i + 1]
@@ -151,13 +151,16 @@ class target():
         self.id = canv.create_oval(0, 0, 0, 0)
         self.color = color
         self.new_target()
-
+        self.a = 25
+        self.h = 0 
     def new_target(self):
         """ Инициализация новой цели. """
         x = self.x = rnd(600, 780)
         y = self.y = rnd(300, 550)
         r = self.r = rnd(2, 50)
         self.dir = 3
+        self.a = 25
+        self.h = 0
         color = self.color
         canv.coords(self.id, x - r, y - r, x + r, y + r)
         canv.itemconfig(self.id, fill=color)
@@ -166,15 +169,15 @@ class target():
     def hit(self):
         """Попадание шарика в цель."""
         global points
-
-        canv.coords(self.id, -10, -10, -10, -10)
-        points += 1
-        #self.points += points
-        show_points()
+        if (self.h == 1):
+            canv.coords(self.id, -10, -10, -10, -10)
+            points += 1
+            #self.points += points
+            show_points()
 
     def move(self):
         self.dir += rnd(-100, 100) / (100 * math.pi)
-        v = bullet + 0.5
+        v = bullet + 1
 
         r = self.r
         x = self.x = max(r, min(800 - r, self.x + v * math.cos(self.dir)))
@@ -182,6 +185,15 @@ class target():
 
         if self.live:
             canv.coords(self.id, x - r, y - r, x + r, y + r)
+        
+        if (self.live == 0 and self.a >= 1):
+             canv.coords(self.id, x - r*self.a, y - r*self.a, x + r*self.a, y + r*self.a)
+             self.a *= 0.8
+        if (self.a < 1):
+            self.h = 1
+
+
+		
 
 
 targets = list()
@@ -190,8 +202,8 @@ guns = list()
 for c in ('red', 'yellow', 'cyan'):
     targets.append(target(c))
     
-for i in range (3):
-	guns.append(gun(20, 420 - i*50))
+for i in range (15):
+	guns.append(gun(20, 420 - i*10))
 
 screen1 = canv.create_text(400, 300, text='', font='28')
 bullet = 0
@@ -213,6 +225,7 @@ def new_game(event=''):
     while any([t.live for t in targets]) or balls:
         for t in targets:
             t.move()
+            t.hit()
 
         del_balls()
         for b in balls:
@@ -287,4 +300,3 @@ def targeting(event):
 new_game()
 
 root.mainloop()
-
