@@ -159,6 +159,8 @@ class target():
         y = self.y = rnd(300, 550)
         r = self.r = rnd(2, 50)
         self.dir = 3
+        self.a = 1
+        self.h = 0
         color = self.color
         canv.coords(self.id, x - r, y - r, x + r, y + r)
         canv.itemconfig(self.id, fill=color)
