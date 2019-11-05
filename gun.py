@@ -186,11 +186,12 @@ class target():
         if self.live:
             canv.coords(self.id, x - r, y - r, x + r, y + r)
         
-        if (self.live == 0 and self.a >= 1):
+        if (self.live == 0 and self.a > 1):
              canv.coords(self.id, x - r*self.a, y - r*self.a, x + r*self.a, y + r*self.a)
              self.a *= 0.8
         if (self.a < 1):
             self.h = 1
+	    self.a = 1
 
 
 		
