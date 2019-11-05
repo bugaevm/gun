@@ -151,7 +151,7 @@ class target():
         self.id = canv.create_oval(0, 0, 0, 0)
         self.color = color
         self.new_target()
-        self.a = 25
+        self.a = 1
         self.h = 0 
     def new_target(self):
         """ Инициализация новой цели. """
@@ -159,8 +159,6 @@ class target():
         y = self.y = rnd(300, 550)
         r = self.r = rnd(2, 50)
         self.dir = 3
-        self.a = 25
-        self.h = 0
         color = self.color
         canv.coords(self.id, x - r, y - r, x + r, y + r)
         canv.itemconfig(self.id, fill=color)
@@ -174,6 +172,7 @@ class target():
             points += 1
             #self.points += points
             show_points()
+            self.h = 0
 
     def move(self):
         self.dir += rnd(-100, 100) / (100 * math.pi)
@@ -186,12 +185,12 @@ class target():
         if self.live:
             canv.coords(self.id, x - r, y - r, x + r, y + r)
         
-        if (self.live == 0 and self.a > 1):
+        if (self.live == 0 and self.a < 50):
              canv.coords(self.id, x - r*self.a, y - r*self.a, x + r*self.a, y + r*self.a)
-             self.a *= 0.8
-        if (self.a < 1):
+             self.a += 5
+        if (self.a > 50):
             self.h = 1
-	    self.a = 1
+            self.a = 50
 
 
 		
